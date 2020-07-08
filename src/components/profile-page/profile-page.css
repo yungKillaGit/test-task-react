@@ -1,0 +1,28 @@
+#sidebar * {
+    margin-left: 20px;
+    color: white;
+}
+
+.header {
+    height: 10%;
+}
+
+.header div {
+    color: white;
+}
+
+#userInfo div {
+    font-size: small;
+ }
+
+.profile-content div {
+    margin-left: 20px;
+}
+
+.profile-content > div + div {
+    margin-top: 50px;
+}
+
+.profile-input div {
+    margin-top: 5px;
+}

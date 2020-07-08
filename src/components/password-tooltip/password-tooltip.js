@@ -66,9 +66,11 @@ const PasswordTooltip = forwardRef((props, ref) => {
   useImperativeHandle(ref, () => ({
     validate: (password) => {
       const newAttributes = {...attributes};
+      let successCount = 0;
       if (password.length >= 8) {
         newAttributes["required-length"].className = classes.success;
         newAttributes["required-length"].isError = false;
+        successCount++;
       } else {
         newAttributes["required-length"].className = classes.error
         newAttributes["required-length"].isError = true;
@@ -76,6 +78,7 @@ const PasswordTooltip = forwardRef((props, ref) => {
       if (/^(?=.*[a-zа-яё])(?=.*[A-ZА-ЯЁ]).+$/.test(password)) {
         newAttributes["upper-lower"].className = classes.success;
         newAttributes["upper-lower"].isError = false;
+        successCount++;
       } else {
         newAttributes["upper-lower"].className = classes.error;
         newAttributes["upper-lower"].isError = true;
@@ -83,9 +86,25 @@ const PasswordTooltip = forwardRef((props, ref) => {
       if (/\d/.test(password)) {
         newAttributes["required-number"].className = classes.success;
         newAttributes["required-number"].isError = false;
+        successCount++;
       } else {
         newAttributes["required-number"].className = classes.error;
         newAttributes["required-number"].isError = true;
+      }
+      const passwordStrengthIndicator = document.getElementById('password-strength');
+      passwordStrengthIndicator.innerHTML = null;
+      passwordStrengthIndicator.style.color = null;
+      if (successCount === 1) {
+        passwordStrengthIndicator.innerHTML = 'Weak';
+        passwordStrengthIndicator.style.color = 'red';
+      }
+      if (successCount === 2) {
+        passwordStrengthIndicator.innerHTML = 'Medium';
+        passwordStrengthIndicator.style.color = 'orange';
+      }
+      if (successCount === 3) {
+        passwordStrengthIndicator.innerHTML = 'Strong';
+        passwordStrengthIndicator.style.color = 'green';
       }
       setAttributes(newAttributes);
     },
@@ -119,7 +138,7 @@ const PasswordTooltip = forwardRef((props, ref) => {
   );
   return (
     <>
-      <IconButton onClick={handleOpen}><HelpOutlineOutlinedIcon/></IconButton>
+      <IconButton className="pr-0" onClick={handleOpen}><HelpOutlineOutlinedIcon/></IconButton>
       <Modal
         open={open}
         onClose={handleClose}

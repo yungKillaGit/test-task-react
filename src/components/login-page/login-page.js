@@ -13,8 +13,8 @@ import { useAuth } from "../../context/auth";
 const LoginPage = () => {
   const { setAuthInfo, setUserInfo } = useAuth();
 
-  const [email, setEmail] = useState('admin@admin.com');
-  const [password, setPassword] = useState('admin');
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
   const [alertMessage, setAlertMessage] = useState();
   const [isLogged, setLogged] = useState(false);
   const [isPasswordVisible, setPasswordVisible] = useState(false);
@@ -39,6 +39,8 @@ const LoginPage = () => {
         setAlertMessage('Not all fields are filled');
       } else if (response.status === 401) {
         setAlertMessage('Incorect password');
+      } else if (response.status === 404) {
+        setAlertMessage('Incorect email');
       }
     });
   };
@@ -66,14 +68,18 @@ const LoginPage = () => {
               <InputAdornment position="end">
                 <IconButton
                   aria-label="toggle password visibility"
+                  className="pr-0"
                   onClick={() => setPasswordVisible(!isPasswordVisible)}
                 >
-                  {isPasswordVisible ? <Visibility /> : <VisibilityOff />}
+                  {isPasswordVisible ? <Visibility className="primary-color" /> : <VisibilityOff className="primary-color" />}
                 </IconButton>
               </InputAdornment>
             }
           />
         </FormControl>
+        <Button type="submit" onClick={login} className="w-25 mt-4 primary-button">
+          Login
+        </Button>
         {
           alertMessage ? (
             <Alert className="mt-3" severity="error" onClose={() => setAlertMessage(null)}>
@@ -82,9 +88,6 @@ const LoginPage = () => {
             </Alert>
           ) : null
         }
-        <Button type="submit" onClick={login} className="w-25 mt-4 primary-button">
-          Login
-        </Button>
       </Grid>
     </Container>
   );

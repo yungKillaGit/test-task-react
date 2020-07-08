@@ -17,10 +17,10 @@ import SaveIcon from '@material-ui/icons/Save';
 import axios from 'axios';
 import Alert from "@material-ui/lab/Alert";
 import AlertTitle from "@material-ui/lab/AlertTitle";
-import { Redirect } from 'react-router-dom';
 import './form-dialog.css';
 import { useAuth } from "../../context/auth";
 import PasswordTooltip from "../password-tooltip/password-tooltip";
+import Grid from "@material-ui/core/Grid";
 
 const styles = (theme) => ({
   root: {
@@ -116,9 +116,9 @@ const FormDialog = forwardRef((props, ref) => {
   };
 
   const changeEmail = () => {
-    if (!contents.email.validate()) {
+    /*if (!contents.email.validate()) {
       return;
-    }
+    }*/
     axios.patch('http://localhost:5000/users/email', {
       email,
     }).then((response) => {
@@ -194,15 +194,23 @@ const FormDialog = forwardRef((props, ref) => {
     },
     password: {
       element:
-        <>
+        <Grid item container direction="column">
           <div className="font-weight-bold">Current password</div>
           <TextField
             {...validationMessages.currentPassword}
             type="password"
             variant="outlined"
             fullWidth={true}
-            onChange={(e) => setCurrentPassword(e.target.value)}/>
-          <div className="mt-4 font-weight-bold">New password</div>
+            onChange={(e) => setCurrentPassword(e.target.value)}
+          />
+          <Grid item container justify="space-between">
+            <Grid item direction="column">
+              <div className="mt-4 font-weight-bold">New password</div>
+            </Grid>
+            <Grid item direction="column">
+              <div className="mt-4" id="password-strength"/>
+            </Grid>
+          </Grid>
           <FormControl fullWidth={true}>
             <OutlinedInput
               id="standard-adornment-password"
@@ -216,7 +224,7 @@ const FormDialog = forwardRef((props, ref) => {
               }
             />
           </FormControl>
-        </>,
+        </Grid>,
       action: changePassword,
     }
   };
